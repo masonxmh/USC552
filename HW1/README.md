@@ -1,135 +1,121 @@
-# homework-1-masonxmh
-
-<center><h1>DSCI-552 HOMEWORK 1</h1></center>
-<center><font size="4">Classification Using KNN</font></center>
-<center><font size="3"><strong>Mason(Mohan) Xing</font></center>
-<center><font size="3"><strong>USCID:	6880083372</font></center>
-
 # Homework 1
 
-#### Background
+DSCI 552 - Classification Using KNN
 
-This Biomedical data set was built by Dr. Henrique da Mota during a medical residence
-period in Lyon, France. Each patient in the data set is represented in the data set
-by six biomechanical attributes derived from the shape and orientation of the pelvis
-and lumbar spine (in this order): pelvic incidence, pelvic tilt, lumbar lordosis angle,
-sacral slope, pelvic radius and grade of spondylolisthesis. The following convention is
-used for the class labels: DH (Disk Hernia), Spondylolisthesis (SL), Normal (NO) and
-Abnormal (AB). In this exercise, we only focus on a binary classication task NO=0
-and AB=1.1
+## Files
 
-This homework contains 6 parts:
+- `notebook/KNN_Classification.ipynb`: Main solution notebook
+- `data/vertebral_column_data/`: Vertebral Column dataset files
+- `Homework1.pdf`: Assignment prompt
+- `requirements.txt`: Python dependencies used by the notebook
 
-#### (a) Download the Vertebral Column Data Set from: https://archive.ics.uci.edu/ml/datasets/Vertebral+Column.
+## Setup
 
-#### (b) Pre-Processing and Exploratory data analysis:
-##### i. Make scatterplots of the independent variables in the dataset. Use color to
-show Classes 0 and 1.
-ii. Make boxplots for each of the independent variables. Use color to show
-Classes 0 and 1 (see ISLR p. 129).
-##### iii. Select the firrst 70 rows of Class 0 and the first 140 rows of Class 1 as the
-training set and the rest of the data as the test set.
+Install dependencies:
 
-#### (c) Classification using KNN on Vertebral Column Data Set
-##### i. Write code for k-nearest neighbor with Euclidean metric
-
-``` python
-def knnclf(knn, k, X_train, X_test, y_train, y_test):
-    temp_dict = {}
-    knn.set_params(n_neighbors=k)
-    knn.fit(X_train, y_train)
-    y_train_pred = knn.predict(X_train)
-    y_test_pred = knn.predict(X_test)
-    # calculate MSE
-    train_error = mean_squared_error(y_train, y_train_pred, squared=True)
-    test_error = mean_squared_error(y_test, y_test_pred, squared=True)
-    # calculate error rate
-    train_accuracy = accuracy_score(y_train, y_train_pred)
-    test_accuracy = accuracy_score(y_test, y_test_pred)
-    train_error_rate = 1-train_accuracy
-    test_error_rate = 1-test_accuracy
-    #construct output dict
-    temp_dict['k'] = k
-    temp_dict['train_error'] = train_error
-    temp_dict['test_error'] = test_error
-    temp_dict['train_error_rate'] = train_error_rate
-    temp_dict['test_error_rate'] = test_error_rate
-    
-    return temp_dict 
+```bash
+pip install -r requirements.txt
 ```
 
-#### ii. Test all the data in the test database with k nearest neighbors. Take decisions by majority polling. Plot train and test errors in terms of k for k âˆˆ { 208, 205, . . . ,7,4,1,} (in reverse order) 
+Run the notebook from `HW1/notebook` so relative paths to `../data/...` resolve correctly.
 
-K* : 4
+## Assignment Mapping (Notebook + Homework1.pdf)
 
-Minimum test error rate: 0.06
+### (a) Download Vertebral Column dataset
+- Implemented in notebook with download/extract utilities.
+- Local dataset is used from `data/vertebral_column_data`.
 
-Minimum train error rate: 0.0
+### (b) Pre-processing and EDA
+- Implemented:
+- Pairwise scatter plots by class (`NO` vs `AB`)
+- Boxplots for the six features by class
+- Train/test split rule from PDF:
+  first 70 rows of class 0 and first 140 rows of class 1 for training;
+  remaining rows for test
 
-True Positive Rate is : 0.9857142857142858
+### (c) KNN classification
 
-True Negtive Rate is : 0.8333333333333334
+#### (c.i) Euclidean KNN implementation
+- Implemented custom helper logic and scikit-learn `KNeighborsClassifier` workflow.
 
-Precision is : 0.9324324324324325
+#### (c.ii) Model selection over `k` and classification report
+- Searched `k` in reverse with step 3 (starting from 208 down to 1).
+- Best `k*`: `4`
+- Minimum test error rate: `0.06`
+- Minimum train error rate: `0.00`
+- Metrics at `k = 4`:
+- True Positive Rate: `0.9857142857142858`
+- True Negative Rate: `0.8333333333333334`
+- Precision: `0.9324324324324325`
+- F1 score: `0.9583333333333333`
 
-f1 score is : 0.9583333333333333
+#### (c.iii) Learning curve (`N` from 10 to 210)
+- Best test error by training size is computed using the PDF rule and `k` grid with step 5.
+- Best overall point on this curve:
+- `N* = 210`
+- `k* = 6`
+- Minimum test error rate: `0.08`
 
-##### iii Since the computation time depends on the size of the training set, one may only use a subset of the training set. Plot the best test error rate, which is obtained by some value of k, against the size of training set, when the size of training set is N âˆˆ {10, 20, 30, ...., 210} 
+| N | k* | Minimum test error rate |
+| --- | --- | --- |
+| 10 | 1 | 0.25 |
+| 20 | 6 | 0.20 |
+| 30 | 1 | 0.22 |
+| 40 | 11 | 0.25 |
+| 50 | 26 | 0.30 |
+| 60 | 21 | 0.29 |
+| 70 | 26 | 0.29 |
+| 80 | 31 | 0.29 |
+| 90 | 41 | 0.29 |
+| 100 | 6 | 0.25 |
+| 110 | 6 | 0.22 |
+| 120 | 16 | 0.17 |
+| 130 | 16 | 0.16 |
+| 140 | 16 | 0.15 |
+| 150 | 16 | 0.13 |
+| 160 | 6 | 0.13 |
+| 170 | 6 | 0.13 |
+| 180 | 6 | 0.10 |
+| 190 | 6 | 0.09 |
+| 200 | 6 | 0.09 |
+| 210 | 6 | 0.08 |
 
-| N | K * | Minimum Test Error Rate  |
-| --| --- | --- |
-|10|[1]|0.25|
-|20|[6]|0.2|
-|30|[1]|0.22|
-|40|[11]| 0.25|
-|50|[26]|0.3|
-|60|[21]|0.29|
-|70|[26]|0.29|
-|80|[31]|0.29|
-|90|[41]|0.29|
-|100|[6]|0.25|
-|110|[6]|0.22|
-|120|[16]|0.17|
-|130|[16]|0.16|
-|140|[16]|0.15|
-|150|[16]|0.13|
-|160|[6]|0.13|
-|170|[6]|0.13|
-|180|[6]|0.1|
-|190|[6]|0.09|
-|200|[6]|0.09|
-|210|[6]|0.08|
+### (d) Distance metric variants
 
-#### (d)Replace the Euclidean metric with Manhattan Distance, log10(p), Chebyshev, Mahalanobis Distance. 
+Test-error summary at each metric's best `k`:
 
-Summary of the Best Test Error Rate
+| Distance | k* | Minimum test error rate |
+| --- | --- | --- |
+| Manhattan (Minkowski p=1) | 6 | 0.11 |
+| Minkowski with `log10(p)=0.6` | 6 | 0.06 |
+| Chebyshev | 16 | 0.08 |
+| Mahalanobis | 1 | 0.17 |
 
+### (e) Weighted KNN voting
 
-| |Distance|	k * 	|min_test_error_rate|
-| -| --| --- | --- |
-|0|	Manhattan	|[6]|	0.11|
-|1|	log10P=[0.6]|	[6]	|0.06|
-|2|	Chebyshev|        [16]	|0.08|
-|3|	Mahalanobis| [1] | 0.17 |
+Best test errors with weighted voting:
 
-#### (e)  The majority polling decision replaced by weighted decision
+| Distance | k* | Minimum test error rate |
+| --- | --- | --- |
+| Euclidean | 6 | 0.10 |
+| Manhattan | 26 | 0.10 |
+| Chebyshev | 16 | 0.11 |
 
-| |Distance|	k * 	|min_test_error_rate|
-| -| --| --- | --- |
-|0|	Euclidean		|[6]|	0.10|
-|1|	Manhattan|	[26]	|0.10|
-|2|	Chebyshev|        [16]	|0.11|
+### (f) Lowest training error achieved
 
-#### (f) The lowest training error rate in this homework
+| Problem | Minimum training error rate |
+| --- | --- |
+| cii | 0.000000 |
+| ciii | 0.000000 |
+| diA | 0.000000 |
+| diB | 0.133333 |
+| diC | 0.000000 |
+| dii | 0.000000 |
+| e_Euclidean | 0.000000 |
+| e_Manhattan | 0.000000 |
+| e_Chebyshev | 0.000000 |
 
-| |Problem|	min_train_error_rate|
-| -| --| --- |
-|0	|cii	|0.000000|
-|1	|ciii	  |0.000000|
-|2	|diA	|0.000000|
-|3	|diB	|0.133333|
-|4	|diC	|0.000000|
-|5	|dii	|0.000000|
-|6	|e_Euclidean	|0.000000|
-|7	|e_Manhattan	|0.000000|
-|8	|e_Chebyshev	|0.000000|
+## Notes
+
+- The notebook includes compatibility fixes for recent scikit-learn versions:
+  `ConfusionMatrixDisplay.from_estimator(...)` is used in place of deprecated `plot_confusion_matrix`.
