@@ -1,0 +1,6 @@
+# Jupyter notebook artifacts
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Notebook temp files
+*.nbconvert.ipynb
