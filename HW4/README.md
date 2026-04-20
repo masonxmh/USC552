@@ -11,19 +11,19 @@ conda create -n py310 python=3.10 -y
 conda activate py310
 ```
 
-### 2. Configure Java for WEKA (current shell)
+### 2. Configure Java for WEKA notebooks (current shell)
 
-Use JDK 9.0.4 (available on this machine at `C:\Program Files\Java\jdk-9.0.4`):
+Use JDK 17:
 
 ```powershell
-$env:JAVA_HOME="C:\Program Files\Java\jdk-9.0.4"
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"
 $env:Path="$env:JAVA_HOME\bin;$env:Path"
 ```
 
 Optional: persist `JAVA_HOME` for future shells:
 
 ```powershell
-[Environment]::SetEnvironmentVariable("JAVA_HOME","C:\Program Files\Java\jdk-9.0.4","User")
+[Environment]::SetEnvironmentVariable("JAVA_HOME","C:\Program Files\Java\jdk-17","User")
 ```
 
 ### 3. Install Python dependencies
@@ -45,6 +45,13 @@ python -c "import numpy,pandas,sklearn,scipy,matplotlib,seaborn,xgboost,impyute,
 ```powershell
 jupyter notebook
 ```
+
+### 6. Java environment by notebook
+
+- `HW4_part1.ipynb`: no Java required.
+- `HW4_part2.ipynb`: no Java required.
+- `HW4_part3.ipynb`: requires WEKA/JVM. Use `JAVA_HOME=C:\Program Files\Java\jdk-17` before running.
+- `HW4_part4.ipynb`: requires WEKA/JVM. Use `JAVA_HOME=C:\Program Files\Java\jdk-17` before running.
 
 ## Notes
 
